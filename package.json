@@ -1,0 +1,46 @@
+{
+	"name": "kirbi-discord-roles",
+	"description": "Adds a collection of Discord-specific role commands to Kirbi",
+	"version": "0.1.0",
+	"license": "Apache-2.0",
+	"readme": "README.md",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Richardson-Media-House/kirbi-discord-moderation.git"
+	},
+	"author": "Matt Carroll <admin@develogix.com> (https://develogix.com)",
+	"contributors": [
+		"Nate Richardson <hello@naterichardson.com> (https://naterichardson.com)"
+	],
+	"main": "roles.js",
+	"dependencies": {
+		"chalk": "^2.3.0",
+		"mongoose": "^4.12.4",
+		"kirbi-discord": "github:Richardson-Media-House/kirbi-discord",
+		"kirbi-mongodb": "github:Richardson-Media-House/kirbi-mongodb"
+	},
+	"devDependencies": {
+		"xo": "^0.18.2"
+	},
+	"xo": {
+		"rules": {
+			"linebreak-style": "off",
+			"no-prototype-builtins": "warn",
+			"radix": "warn",
+			"guard-for-in": "warn",
+			"import/no-unresolved": "off",
+			"camelcase": "off",
+			"no-negated-condition": "off",
+			"object-curly-spacing": [
+				"error",
+				"always",
+				{
+					"arraysInObjects": false
+				}
+			]
+		}
+	},
+	"scripts": {
+		"test": "xo"
+	}
+}
