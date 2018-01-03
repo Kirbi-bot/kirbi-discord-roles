@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const guildAssignableRolesSchema = require('./classes/guild-assignable-roles-schema');
 
 module.exports = Kirbi => {
-	Kirbi.Config.roles = [];
+	Kirbi.Config.discord.roles = [];
 	require('./lib/on-event')(Kirbi);
 
 	function createEmbed(info) {
@@ -23,10 +23,29 @@ module.exports = Kirbi => {
 
 	return {
 		commands: [
+			'accept',
 			'iam',
 			'iamnot',
 			'role'
 		],
+		accept: {
+			usage: '',
+			description: `command for accepting a server's rules. The bot then assigns the default role`,
+			process: (msg, suffix, isEdit, cb) => {
+				if (Kirbi.Config.discord.roles && Object.keys(Kirbi.Config.discord.roles).includes(msg.guild.id) && Kirbi.Config.discord.roles[msg.guild.id].default) {
+					const role = Kirbi.Config.discord.roles[msg.guild.id].default;
+
+					if (role) {
+						if (!msg.member.roles.has(role)) {
+							console.log(chalk.blue(`Added default role ${role.name}:${role.id} to ${msg.member.name}:${msg.member.id} on ${msg.guild.name}:${msg.guild.id}`));
+							msg.member.addRole(role);
+						}
+					} else {
+						console.log(chalk.red(`Default role for ${msg.guild.name}:${msg.guild.id} is not configured properly.`));
+					}
+				}
+			}
+		},
 		iam: {
 			usage: '',
 			description: '',
