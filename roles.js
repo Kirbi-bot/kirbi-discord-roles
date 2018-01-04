@@ -31,7 +31,7 @@ module.exports = Kirbi => {
 		accept: {
 			usage: '',
 			description: `command for accepting a server's rules. The bot then assigns the default role`,
-			process: (msg, suffix, isEdit, cb) => {
+			process: msg => {
 				if (Kirbi.Config.discord.roles && Object.keys(Kirbi.Config.discord.roles).includes(msg.guild.id) && Kirbi.Config.discord.roles[msg.guild.id].default) {
 					const role = Kirbi.Config.discord.roles[msg.guild.id].default;
 
@@ -39,6 +39,7 @@ module.exports = Kirbi => {
 						if (!msg.member.roles.has(role)) {
 							console.log(chalk.blue(`Added default role ${role.name}:${role.id} to ${msg.member.name}:${msg.member.id} on ${msg.guild.name}:${msg.guild.id}`));
 							msg.member.addRole(role);
+							msg.delete();
 						}
 					} else {
 						console.log(chalk.red(`Default role for ${msg.guild.name}:${msg.guild.id} is not configured properly.`));
@@ -47,8 +48,8 @@ module.exports = Kirbi => {
 			}
 		},
 		iam: {
-			usage: '',
-			description: '',
+			usage: '<role name>',
+			description: 'add role to self, if it is assignable',
 			process: (msg, suffix, isEdit, cb) => {
 				if (!isEdit) {
 					const role = msg.guild.roles.find(r => r.name.toLowerCase() === suffix);
@@ -61,14 +62,18 @@ module.exports = Kirbi => {
 							msg.member.addRole(role.id);
 
 							cb(createEmbed(`Added ${role.name} to your roles.`), msg);
+						} else {
+							cb(createEmbed(`That role is not assignable.`), msg);
 						}
+					} else {
+						cb(createEmbed(`That role could not be found.`), msg);
 					}
 				}
 			}
 		},
 		iamnot: {
-			usage: '',
-			description: '',
+			usage: '<role name>',
+			description: 'remove roll from self, if it is assignable',
 			process: (msg, suffix, isEdit, cb) => {
 				if (!isEdit) {
 					const role = msg.guild.roles.find(r => r.name.toLowerCase() === suffix);
@@ -81,13 +86,17 @@ module.exports = Kirbi => {
 							msg.member.removeRole(role.id);
 
 							cb(createEmbed(`Removed ${role.name} from your roles.`), msg);
+						} else {
+							cb(createEmbed(`That role is not assignable.`), msg);
 						}
+					} else {
+						cb(createEmbed(`That role could not be found.`), msg);
 					}
 				}
 			}
 		},
 		role: {
-			usage: 'add|remove|default|list <role name>',
+			usage: 'add <role name>|remove <role name>|default <role name>|list',
 			description: '',
 			process: (msg, suffix, isEdit, cb) => {
 				if (!isEdit) {
